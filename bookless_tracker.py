@@ -5,7 +5,6 @@ from PIL import ImageTk, Image, ImageDraw, ImageFont
 
 icon_vars = {}
 buildings_vars = {}
-labels = {}
 buildings_count = 1
 
 
@@ -27,10 +26,10 @@ class Checkbar(Frame):
             pick_name = pick.lower()
             if pick_name in icon_vars:
                 var = icon_vars[pick_name]
+            elif pick_name in buildings_vars:
+                var = buildings_vars[pick_name]
             else:
                 var = IntVar()
-                if pick.lower() != "monster hut 3":
-                    buildings_vars[pick_name] = var
 
             chk = Checkbutton(self, text=pick, variable=var, command=update_display)
             chk.configure(background='#D39B6A', activebackground='#D39B6A')
@@ -67,16 +66,10 @@ if __name__ == '__main__':
     photos = []
     icon_positions = {'nico': (39, 80), 'selfi': (71, 80), 'fur': (103, 80), 'patty': (135, 80), 'vivian': (167, 80), 'mia': (199, 80), 'cherrl': (231, 80), 'beldo':(264, 80), 'blue collar': (374, 38), 'windmills': (406, 38), 'pool': (438, 38)}
     for icon, (x, y) in icon_positions.items():
-        image = Image.open(resource_path('data/' + icon + '.png'))
-        photo = ImageTk.PhotoImage(image, master=graphic)
-        photos.append(photo)  # keep pointers in memory
-        label = Label(graphic, image=photo, borderwidth=0)
-        label.place(x=x, y=y)
-        label.place_forget()
-        labels[icon] = label
-
-        icon_var = IntVar()
-        icon_vars[icon] = icon_var
+        icon_vars[icon] = IntVar()
+    buildings = {'house 1', 'house 2', 'monster hut 1', 'monster hut 2', 'monster hut 4', 'racetrack', 'temple', 'casino', 'hospital', 'fountain', 'library', 'theater', 'bowling alley', 'arcade', 'gym'}
+    for building in buildings:
+        buildings_vars[building] = IntVar()
 
     def update_display(event=None):
         global save_label, save_photo, buildings_count
@@ -91,16 +84,12 @@ if __name__ == '__main__':
         azure_font = ImageFont.truetype(resource_path('data/Azure_Dreams.ttf'), 30)
         draw.text((130, 19), name_var.get()[:15], font=azure_font, fill='black')
         draw.text((464, 83), str(buildings_count), font=azure_font, fill='black')
+        for icon, var in icon_vars.items():
+            if var.get():
+                icon_image = Image.open(resource_path('data/' + icon + '.png'))
+                save_screen.paste(icon_image, box=icon_positions[icon])
         save_photo = ImageTk.PhotoImage(save_screen, master=graphic)
         save_label.configure(image=save_photo)
-
-        # enable/disable icon labels
-        for icon, var in icon_vars.items():
-            label = labels[icon]
-            if var.get():
-                label.place(x=icon_positions[icon][0], y=icon_positions[icon][1])
-            else:
-                label.place_forget()
 
     # Create checkbuttons linked to images
     create_checklist('Girls', ['Nico', 'Selfi', 'Fur', 'Patty', 'Vivian', 'Mia', 'Cherrl'])
