@@ -44,14 +44,17 @@ if __name__ == '__main__':
 
     row = 0
 
-    def create_checklist(label, entries):
+    def create_checklist(checklist_name, entries):
         global row
-        label = Label(root, text=label, font=('Helvetica', 10, 'bold'), background='#26AFF3')
-        label.grid(row=row, sticky=W, padx=2, pady=0)
+        if checklist_name:
+            label = Label(root, text=checklist_name, font=('Helvetica', 10, 'bold'), background='#26AFF3')
+            label.grid(row=row, sticky=W, padx=2, pady=0)
+            row += 1
         checkbar = Checkbar(root, entries)
-        checkbar.grid(row=row+1, sticky=W, padx=2, pady=0)
+        checkbar.grid(row=row, sticky=W, padx=2, pady=2)
         checkbar.config(relief=GROOVE, bd=2)
-        row += 2
+        row += 1
+        return checkbar
 
     # Graphic display window
     graphic = Tk()
@@ -91,21 +94,9 @@ if __name__ == '__main__':
         save_photo = ImageTk.PhotoImage(save_screen, master=graphic)
         save_label.configure(image=save_photo)
 
-    # Create checkbuttons linked to images
-    create_checklist('Girls', ['Nico', 'Selfi', 'Fur', 'Patty', 'Vivian', 'Mia', 'Cherrl'])
-    create_checklist('House upgrades',
-                     ['House 1', 'House 2', 'Monster Hut 1', 'Monster Hut 2', 'Monster Hut 3', 'Monster Hut 4'])
-    create_checklist('Buildings',
-                     ['Racetrack', 'Temple', 'Casino', 'Hospital', 'Fountain', 'Library', 'Theater', 'Bowling Alley',
-                      'Arcade', 'Gym'])
-    create_checklist('Quests', ['Blue Collar', 'Windmills', 'Pool', 'Beldo'])
-
     # name field
     name_var = StringVar()
     name_var.set("Koh")
-    name_label = Label(root, text='Name', font=('Helvetica', 10, 'bold'), background='#26AFF3')
-    name_label.grid(row=row, sticky=W, padx=2, pady=0)
-    row += 1
     name_entry = Entry(root, textvariable=name_var, font=('calibre', 10, 'normal'))
     name_entry.grid(row=row, sticky=W, padx=4, pady=4)
 
@@ -119,7 +110,39 @@ if __name__ == '__main__':
                     if isinstance(w, Checkbutton):
                         w.deselect()
         update_display()
-    Button(root, text='Clear', command=clear).grid(row=row, sticky=E, padx=4, pady=4)
+    Button(root, text='Clear', command=clear).grid(row=row, column=0, sticky=E, padx=4, pady=4)
+
+    def quit_all():
+        graphic.destroy()
+        root.destroy()
+    Button(root, text='Quit', command=quit_all).grid(row=row, column=1, padx=4, pady=4)
+    row += 1
+
+    # Create checkbuttons linked to images
+    create_checklist('Girls', ['Nico', 'Selfi', 'Fur', 'Patty', 'Vivian', 'Mia', 'Cherrl'])
+    create_checklist('House upgrades',
+                     ['House 1', 'House 2', 'Monster Hut 1', 'Monster Hut 2', 'Monster Hut 3', 'Monster Hut 4'])
+    create_checklist('Buildings',
+                     ['Racetrack', 'Temple', 'Casino', 'Hospital', 'Fountain', 'Library', 'Theater', 'Bowling Alley',
+                      'Arcade', 'Gym'])
+    create_checklist('Quests', ['Blue Collar', 'Windmills', 'Pool', 'Beldo'])
+
+    food_check_lists = []
+
+    def reveal_food():
+        global row
+        if food_check_lists:
+            for c in food_check_lists:
+                c.destroy()
+                row -= 1
+            food_check_lists.clear()
+        else:
+            food_check_lists.append(create_checklist('', ['Rice', 'Soy Beans', 'Tofu', 'Sandsand', 'Cutlet']))
+            food_check_lists.append(create_checklist('', ['Crystal Curry', 'Spiral Rice', 'Chicken', 'Shining Prawn', 'Beef Rice']))
+            food_check_lists.append(create_checklist('', ['Special', 'Red Sushi', 'Blue Sushi', 'Yellow Sushi', 'Green Sushi']))
+
+    Button(root, text='Food', command=reveal_food).grid(row=row, column=0, sticky=W, padx=4, pady=4)
+    row += 1
 
     # run
     root.mainloop()
