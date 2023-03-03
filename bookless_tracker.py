@@ -61,7 +61,7 @@ if __name__ == '__main__':
     graphic.title("Bookless graphical display")
     graphic.geometry("512x160")
 
-    save_screen = Image.open(resource_path("data/save_screen.png"))
+    save_screen = Image.open(resource_path("data_bookless/save_screen.png"))
     save_photo = ImageTk.PhotoImage(save_screen, master=graphic)
     save_label = Label(graphic, image=save_photo, borderwidth=0)
     save_label.place(x=0, y=0)
@@ -82,14 +82,14 @@ if __name__ == '__main__':
             buildings_count += var.get()
 
         # create updated image with new name and building count
-        save_screen = Image.open(resource_path("data/save_screen.png"))
+        save_screen = Image.open(resource_path("data_bookless/save_screen.png"))
         draw = ImageDraw.Draw(save_screen)
-        azure_font = ImageFont.truetype(resource_path('data/Azure_Dreams.ttf'), 30)
+        azure_font = ImageFont.truetype(resource_path('data_bookless/Azure_Dreams.ttf'), 30)
         draw.text((130, 19), name_var.get()[:15], font=azure_font, fill='black')
         draw.text((464, 83), str(buildings_count), font=azure_font, fill='black')
         for icon, var in icon_vars.items():
             if var.get():
-                icon_image = Image.open(resource_path('data/' + icon + '.png'))
+                icon_image = Image.open(resource_path('data_bookless/' + icon + '.png'))
                 save_screen.paste(icon_image, box=icon_positions[icon])
         save_photo = ImageTk.PhotoImage(save_screen, master=graphic)
         save_label.configure(image=save_photo)
