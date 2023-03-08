@@ -27,7 +27,7 @@ if __name__ == '__main__':
     # Graphic display window
     graphic = Tk()
     graphic.title("Monster book graphical display")
-    graphic.geometry("1280x864")
+    graphic.geometry("1141x864")
     save_photo = None
     save_label = Label(graphic, image='', borderwidth=0)
     save_label.place(x=0, y=0)
@@ -66,13 +66,13 @@ if __name__ == '__main__':
         for monster, var in monster_vars.items():
             if var.get():
                 monster_image = Image.open(resource_path('data_book/' + monster + '.png'))
-                x, y = 116, 76
+                x, y = 75, 76
                 page, col, row = monster_coords[monster]
                 if col:
                     x += 256
                 y += (36*row)
                 if page in (1, 3):
-                    x += 640
+                    x += 576
                 if page in (2, 3):
                     y += 432
 
@@ -93,7 +93,7 @@ if __name__ == '__main__':
     def handle_mouse_click(event):
         x, y = event.x, event.y
         # find page
-        if x >= 640:
+        if x >= 576:
             if y >= 432:
                 page = 3
             else:
@@ -102,11 +102,11 @@ if __name__ == '__main__':
             page = 2
         else:
             page = 0
-        x %= 640
+        x %= 576
         y %= 432
 
         # find col
-        x -= 66
+        x -= 25
         col = 1 if x >= 256 else 0
 
         # find row
