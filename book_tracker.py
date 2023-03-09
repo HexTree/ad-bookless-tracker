@@ -119,5 +119,17 @@ if __name__ == '__main__':
             update()
     graphic.bind('<Button-1>', handle_mouse_click)
 
+    def clear():
+        for widget in root.winfo_children():
+            if isinstance(widget, Checkbutton):
+                widget.deselect()
+        update()
+    Button(root, text='Clear', command=clear).grid(row=row, column=0, sticky=W, padx=4, pady=8)
+
+    def quit_all():
+        graphic.destroy()
+        root.destroy()
+    Button(root, text='Quit', command=quit_all).grid(row=row, column=1, sticky=W, padx=4, pady=8)
+
     # run
     root.mainloop()
